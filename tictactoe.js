@@ -33,6 +33,10 @@ const board = (() => {
     return false;
   }
 
+  const key = function(x, y){
+    return `${x},${y}`;
+  }
+
   const clearBoard = function() {
     console.log("Board-clear not implemented")
   }
@@ -43,13 +47,18 @@ const board = (() => {
     clearBoard()
     for (let x = xMin; x <= xMax; x++) {
       for (let y = yMin; y <= yMax; y++) {
-        spaces[`${x},${y}`] = null;
+        spaces[key(x, y)] = null;
       }
     }
   }
 
   const setMove = function(x, y, value) {
-
+    if ((key(x, y)) in spaces) {
+      spaces[key(x, y)] = value
+    }
+    else {
+      console.log(`can't move at ${x}, ${y}`)
+    }
   }
 
   return {
