@@ -1,0 +1,20 @@
+* {
+  box-sizing: border-box;
+  margin: 0px;
+}
+
+.board {
+  display: grid;
+  width: min(50vh, 50vw);
+  aspect-ratio: 1;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  border: 1px dotted red;
+}
+
+.space {
+  border: 1px dotted blue;
+  text-align: center;
+  /* this isn't working as I expect */
+  vertical-align: center;
+}
