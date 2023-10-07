@@ -1,5 +1,8 @@
 "use strict";
 
+const doc = document;
+const playArea = doc.querySelector(".board");
+
 /**
  * Tests whether something is between (INCLUSIVE) two limits.
  * Use Infinity/-Infinity for unbounded limits.
@@ -61,9 +64,32 @@ const board = (() => {
     }
   }
 
+  /**
+   * Consider splitting this into multiple draws if I don't want to
+   * completely redraw every time?
+   * @param {Element} el 
+   */
+  const drawBoard = function(el) {
+    el.replaceChildren()
+    for (const space in spaces) {
+      let x, y;
+      [x, y] = space.split(",");
+      const cell = el.appendChild(doc.createElement("div"));
+      cell.textContent = spaces[space];
+      cell.setAttribute("data-x", x);
+      cell.setAttribute("data-y", y);
+    }
+  }
+
   return {
     clearBoard,
     newBoard,
     setMove,
+    drawBoard,
     spaces};
 })();
+
+// setup
+board.newBoard();
+board.setMove(1, 1, "x");
+board.drawBoard(playArea);
