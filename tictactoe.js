@@ -18,6 +18,33 @@ const between = function(x, min, max) {
   return false
 }
 
+/**
+ * The interface between the DOM and the console-level Board
+ * @param {Element} el
+ */
+const Surface = ((el) => {
+  /**
+   * Consider splitting this into multiple draws if I don't want to
+   * completely redraw every time?
+   * @param {Element} el 
+   */
+  const drawBoard = function(board) {
+    el.replaceChildren()
+    for (const space in board.spaces) {
+      let x, y;
+      [x, y] = space.split(",");
+      const cell = el.appendChild(doc.createElement("div"));
+      cell.textContent = board.spaces[space];
+      cell.setAttribute("data-x", x);
+      cell.setAttribute("data-y", y);
+    }
+  }
+
+  return {
+    drawBoard
+  };
+});
+
 const board = (() => {
   // needs to tell you what is needed to draw it
   const rows = 3;
@@ -68,32 +95,15 @@ const board = (() => {
     }
   }
 
-  /**
-   * Consider splitting this into multiple draws if I don't want to
-   * completely redraw every time?
-   * @param {Element} el 
-   */
-  const drawBoard = function(el) {
-    el.replaceChildren()
-    for (const space in spaces) {
-      let x, y;
-      [x, y] = space.split(",");
-      const cell = el.appendChild(doc.createElement("div"));
-      cell.textContent = spaces[space];
-      cell.setAttribute("data-x", x);
-      cell.setAttribute("data-y", y);
-    }
-  }
-
   return {
     clearBoard,
     newBoard,
     move,
-    drawBoard,
     spaces};
 })();
 
 // setup
 board.newBoard();
 board.move(1, 1, "x");
-board.drawBoard(playArea);
+const surface = Surface(playArea);
+surface.drawBoard(board);
