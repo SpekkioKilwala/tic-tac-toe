@@ -20,17 +20,15 @@ const between = function(x, min, max) {
 
 const board = (() => {
   // needs to tell you what is needed to draw it
-  const xMin = 0;
-  const xMax = 2;
-  const yMin = 0;
-  const yMax = 2;
+  const rows = 3;
+  const columns = 3;
   
   const spaces = {};
   // spaces["1,1"] = "x";
 
   // questionable value
   const withinBorders = function(x, y){
-    if ((between(x, xMin, xMax)) & between(y, yMin, yMax)) {
+    if ((between(x, 1, columns)) & between(y, 1, rows)) {
       return true;
     }
     return false;
@@ -48,8 +46,8 @@ const board = (() => {
   // I'll start with creating a 3x3 flat board
   const newBoard = function() {
     clearBoard()
-    for (let x = xMin; x <= xMax; x++) {
-      for (let y = yMin; y <= yMax; y++) {
+    for (let x = 1; x <= columns; x++) {
+      for (let y = 1; y <= rows; y++) {
         spaces[key(x, y)] = null;
       }
     }
