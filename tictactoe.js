@@ -20,15 +20,17 @@ const between = function(x, min, max) {
 
 /**
  * The interface between the DOM and the console-level Board
+ * You set it up to use a particular element and particular board
  * @param {Element} el
  */
-const Surface = ((el) => {
+const Surface = ((board, el) => {
   /**
    * Consider splitting this into multiple draws if I don't want to
    * completely redraw every time?
    * @param {Element} el 
    */
-  const drawBoard = function(board) {
+
+  const drawBoard = function() {
     el.replaceChildren()
     for (const space in board.spaces) {
       let x, y;
@@ -105,5 +107,5 @@ const board = (() => {
 // setup
 board.newBoard();
 board.move(1, 1, "x");
-const surface = Surface(playArea);
-surface.drawBoard(board);
+const surface = Surface(board, playArea);
+surface.drawBoard();
