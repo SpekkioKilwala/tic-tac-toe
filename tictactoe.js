@@ -32,8 +32,25 @@ const Surface = ((board, el) => {
 
   el.addEventListener("click", (e) => {
     // console.log("clicked!")
-    console.log(e.target);
+    console.log(`Clicked on: ${getKeys(e.target)}`)
   })
+
+  /**
+   * 
+   * @param {Element} element 
+   * @return {string}
+   */
+  const getKeys = function(element) {
+    const x = element.dataset.x;
+    const y = element.dataset.y;
+    if (x & y) {
+      return `${x},${y}`
+    }
+    else {
+      console.log("No key");
+      return null;
+    }
+  }
 
   const drawBoard = function() {
     el.replaceChildren()
