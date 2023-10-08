@@ -53,7 +53,7 @@ const board = (() => {
     }
   }
 
-  const setMove = function(x, y, value) {
+  const move = function(x, y, value) {
     if (spaces[key(x, y)]) {
       console.log("Space is occupied!");
       return;
@@ -88,12 +88,12 @@ const board = (() => {
   return {
     clearBoard,
     newBoard,
-    setMove,
+    move,
     drawBoard,
     spaces};
 })();
 
 // setup
 board.newBoard();
-board.setMove(1, 1, "x");
+board.move(1, 1, "x");
 board.drawBoard(playArea);
