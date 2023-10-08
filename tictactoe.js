@@ -75,8 +75,13 @@ const board = (() => {
   // I'll start with creating a 3x3 flat board
   const newBoard = function() {
     clearBoard()
-    for (let x = 1; x <= columns; x++) {
-      for (let y = 1; y <= rows; y++) {
+    // The inner loop gets incremented first, so those keys
+    // get created first, which means the inner loop has
+    // to be your ROWS.
+    for (let y = 1; y <= rows; y++) {
+        for (let x = 1; x <= columns; x++) {
+        // A primitive way to see how the cells are laid out
+        // spaces[key(x, y)] = key(x, y);
         spaces[key(x, y)] = null;
       }
     }
