@@ -54,11 +54,17 @@ const board = (() => {
   }
 
   const setMove = function(x, y, value) {
-    if ((key(x, y)) in spaces) {
-      spaces[key(x, y)] = value
+    if (spaces[key(x, y)]) {
+      console.log("Space is occupied!");
+      return;
+    }
+    else if (!((key(x, y)) in spaces)) {
+      console.log(`can't move at ${x}, ${y}`);
+      return;
     }
     else {
-      console.log(`can't move at ${x}, ${y}`)
+      spaces[key(x, y)] = value;
+      return true;
     }
   }
 
