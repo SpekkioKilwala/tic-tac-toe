@@ -30,6 +30,11 @@ const Surface = ((board, el) => {
    * @param {Element} el 
    */
 
+  el.addEventListener("click", (e) => {
+    // console.log("clicked!")
+    console.log(e.target);
+  })
+
   const drawBoard = function() {
     el.replaceChildren()
     for (const space in board.spaces) {
@@ -37,6 +42,7 @@ const Surface = ((board, el) => {
       [x, y] = space.split(",");
       const cell = el.appendChild(doc.createElement("div"));
       cell.textContent = board.spaces[space];
+      cell.setAttribute("class", "space");
       cell.setAttribute("data-x", x);
       cell.setAttribute("data-y", y);
     }
