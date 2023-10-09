@@ -127,13 +127,14 @@ const controller = (() => {
       return;
     }
     if (board.move(x, y, value)) { // board reports if the move was successfully applied
-      if (!winCondition()) {
+      gameOver = checkWinCondition();
+      if (!gameOver) {
         turn++;
       }
     }
   }
 
-  const winCondition = function() {
+  const checkWinCondition = function() {
     // A win search can be done much more efficiently if you
     // specify the move that was JUST made.
     return false;
