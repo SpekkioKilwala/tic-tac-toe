@@ -100,6 +100,7 @@ const board = (() => {
 const controller = (() => {
   let turn = 0; // Fine as long as I don't want to print turns to the UI
   let gameOver = false;
+  let status = "Controller online..."
   const players = [
     {
       "side": "x",
@@ -139,10 +140,10 @@ const controller = (() => {
       if (!gameOver) {
         turn++;
         if (activePlayer().who == "human") {
-          gameStatus.textContent = "Your turn:";
+          status = "Your turn:";
           return;
         }
-        gameStatus.textContent = "AI outsourced to Mechanical Turk:";
+        status = "AI outsourced to Mechanical Turk:";
         return;
         // if it's a human move now, just end
         // if it's an AI move now, just call its makeMove() method and end?
@@ -172,6 +173,7 @@ const controller = (() => {
     handle,
     players,
     turn,
+    status,
     activePlayer,
   };
 })();
@@ -241,6 +243,7 @@ const surface = ((el) => {
       cell.setAttribute("data-x", x);
       cell.setAttribute("data-y", y);
     }
+    gameStatus.textContent = controller.status;
   }
 
   return {
