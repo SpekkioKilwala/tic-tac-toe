@@ -148,13 +148,32 @@ const board = (() => {
     }
   }
 
-  let activePlayer = "x";
+  let turn = 0; // Fine as long as I don't want to print turns to the UI
+
+  // Because we use modulo arithmetic to find the active player from the turn number,
+  // the indexes need to be 0 upwards and regular, so an array is used
+  const players = [
+    {
+      "side": "x",
+      "who": "human",
+    },
+    {
+      "side": "o",
+      "who": "human",
+    }
+  ];
+  const activePlayer = function(turn) {
+    return (players[turn % players.length]);
+  };
+
 
   return {
     clearBoard,
     newBoard,
     move,
-    spaces};
+    spaces,
+    players,
+    activePlayer};
 })();
 
 // setup
