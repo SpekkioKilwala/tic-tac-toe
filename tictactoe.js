@@ -32,7 +32,12 @@ const Surface = ((board, el) => {
 
   el.addEventListener("click", (e) => {
     // console.log("clicked!")
-    console.log(`Clicked on: ${getKeys(e.target)}`)
+    const [x, y, keys] = getKeys(e.target)
+    if (!keys) {
+      return;
+    }
+    console.log(`Clicked on: ${keys}`)
+    board.move(x, y, "x");
   })
 
   /**
@@ -47,7 +52,7 @@ const Surface = ((board, el) => {
       console.log("No key")
       return null;
     }
-    return `${x},${y}`
+    return [x, y, `${x},${y}`]
 
     // This previous version contained a bug; rather than a logical "and"
     // it performed a BITWISE "and" on the numeric values of the keys.
