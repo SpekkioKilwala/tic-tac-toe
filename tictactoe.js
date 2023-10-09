@@ -107,7 +107,9 @@ const controller = (() => {
       console.log("Space is occupied!");
       return;
     }
-    board.move(x, y, value);
+    if (board.move(x, y, value)) {
+      turn++;
+    }
   }
 
   let turn = 0; // Fine as long as I don't want to print turns to the UI
@@ -208,5 +210,5 @@ const surface = ((el) => {
 
 // setup
 board.newBoard();
-board.move(1, 1, "x");
+// board.move(1, 1, "x");
 surface.drawBoard();
