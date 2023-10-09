@@ -114,6 +114,11 @@ const controller = (() => {
     return (players[turn % players.length]);
   };
 
+  const handle = function (action) {
+    action();
+    surface.drawBoard();
+  }
+
   const move = function(x, y, value) {
     // Can accept a specific player, or supplies its own
     if (gameOver) {
@@ -159,13 +164,12 @@ const controller = (() => {
     // so like the first row is the horizontal stripe, the second row is the left-slant...
     // then you have a 1d search in each of those for a sufficiently long chain.
 
-
-
     return false;
   }
 
   return {
     move,
+    handle,
     players,
     turn,
     activePlayer,
@@ -191,8 +195,10 @@ const surface = ((el) => {
       return;
     }
     console.log(`Clicked on: ${keys}`)
-    controller.move(x, y);
-    drawBoard();
+    // const action = controller.move.call(null, x, y);
+    const action = controller.move.bind(null, x, y);
+    controller.handle(action);
+    // controller.move(x, y);
   })
 
   /**
