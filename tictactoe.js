@@ -18,76 +18,6 @@ const between = function(x, min, max) {
   return false
 }
 
-/**
- * The interface between the DOM and the console-level Board
- * You set it up to use a particular element and particular board
- * @param {Element} el
- */
-const Surface = ((board, el) => {
-  /**
-   * Consider splitting this into multiple draws if I don't want to
-   * completely redraw every time?
-   * @param {Element} el 
-   */
-
-  el.addEventListener("click", (e) => {
-    // console.log("clicked!")
-    const [x, y, keys] = getKeys(e.target)
-    if (!keys) {
-      return;
-    }
-    console.log(`Clicked on: ${keys}`)
-    board.move(x, y);
-    drawBoard();
-  })
-
-  /**
-   * 
-   * @param {Element} element 
-   * @return {string}
-   */
-  const getKeys = function(element) {
-    const x = element.dataset.x;
-    const y = element.dataset.y;
-    if (!x | !y) {
-      console.log("No key")
-      return [null, null, null];
-    }
-    return [x, y, `${x},${y}`]
-
-    // This previous version contained a bug; rather than a logical "and"
-    // it performed a BITWISE "and" on the numeric values of the keys.
-    // The result was that where there was no overlap between numbers ("1" & "2")
-    // it claimed that the cell had no key.
-
-    // console.table(x, y);
-    // if (x & y) {
-    //   return `${x},${y}`
-    // }
-    // else {
-    //   console.log("No key");
-    //   return null;
-    // }
-  }
-
-  const drawBoard = function() {
-    el.replaceChildren()
-    for (const space in board.spaces) {
-      let x, y;
-      [x, y] = space.split(",");
-      const cell = el.appendChild(doc.createElement("div"));
-      cell.textContent = board.spaces[space];
-      cell.setAttribute("class", "space");
-      cell.setAttribute("data-x", x);
-      cell.setAttribute("data-y", y);
-    }
-  }
-
-  return {
-    drawBoard
-  };
-});
-
 const board = (() => {
   // needs to tell you what is needed to draw it
   const rows = 3;
@@ -166,7 +96,6 @@ const board = (() => {
     return (players[turn % players.length]);
   };
 
-
   return {
     clearBoard,
     newBoard,
@@ -176,8 +105,85 @@ const board = (() => {
     activePlayer};
 })();
 
+const controller = (() => {
+  const move = function(x, y, value) {
+    board.move(x, y, value);
+  }
+
+  return {move};
+})(board);
+
+/**
+ * The interface between the DOM and the console-level Board
+ * You set it up to use a particular element and particular board
+ * @param {Element} el
+ */
+const surface = ((controller, board, el) => {
+  /**
+   * Consider splitting this into multiple draws if I don't want to
+   * completely redraw every time?
+   * @param {Element} el 
+   */
+
+  el.addEventListener("click", (e) => {
+    // console.log("clicked!")
+    const [x, y, keys] = getKeys(e.target)
+    if (!keys) {
+      return;
+    }
+    console.log(`Clicked on: ${keys}`)
+    controller.move(x, y);
+    drawBoard();
+  })
+
+  /**
+   * 
+   * @param {Element} element 
+   * @return {string}
+   */
+  const getKeys = function(element) {
+    const x = element.dataset.x;
+    const y = element.dataset.y;
+    if (!x | !y) {
+      console.log("No key")
+      return [null, null, null];
+    }
+    return [x, y, `${x},${y}`]
+
+    // This previous version contained a bug; rather than a logical "and"
+    // it performed a BITWISE "and" on the numeric values of the keys.
+    // The result was that where there was no overlap between numbers ("1" & "2")
+    // it claimed that the cell had no key.
+
+    // console.table(x, y);
+    // if (x & y) {
+    //   return `${x},${y}`
+    // }
+    // else {
+    //   console.log("No key");
+    //   return null;
+    // }
+  }
+
+  const drawBoard = function() {
+    el.replaceChildren()
+    for (const space in board.spaces) {
+      let x, y;
+      [x, y] = space.split(",");
+      const cell = el.appendChild(doc.createElement("div"));
+      cell.textContent = board.spaces[space];
+      cell.setAttribute("class", "space");
+      cell.setAttribute("data-x", x);
+      cell.setAttribute("data-y", y);
+    }
+  }
+
+  return {
+    drawBoard
+  };
+})(controller, board, playArea);
+
 // setup
 board.newBoard();
 board.move(1, 1, "x");
-const surface = Surface(board, playArea);
 surface.drawBoard();
