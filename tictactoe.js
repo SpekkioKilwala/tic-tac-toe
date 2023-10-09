@@ -128,8 +128,12 @@ const controller = (() => {
     }
     if (board.move(x, y, value)) { // board reports if the move was successfully applied
       gameOver = checkWinCondition();
+      // This structure is a little funky. If you have a round-based
+      // gameplay loop then that loop should be obvious.
       if (!gameOver) {
         turn++;
+        // if it's a human move now, just end
+        // if it's an AI move now, just call its makeMove() method and end?
       }
     }
   }
@@ -146,7 +150,7 @@ const controller = (() => {
     // so like the first row is the horizontal stripe, the second row is the left-slant...
     // then you have a 1d search in each of those for a sufficiently long chain.
 
-    
+
 
     return false;
   }
