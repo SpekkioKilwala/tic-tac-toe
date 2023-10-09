@@ -37,7 +37,7 @@ const Surface = ((board, el) => {
       return;
     }
     console.log(`Clicked on: ${keys}`)
-    board.move(x, y, "x");
+    board.move(x, y);
   })
 
   /**
@@ -50,7 +50,7 @@ const Surface = ((board, el) => {
     const y = element.dataset.y;
     if (!x | !y) {
       console.log("No key")
-      return null;
+      return [null, null, null];
     }
     return [x, y, `${x},${y}`]
 
@@ -128,6 +128,11 @@ const board = (() => {
   }
 
   const move = function(x, y, value) {
+    // Can accept a specific player, or supplies its own
+    if (!value) {
+      value = activePlayer;
+    }
+
     if (spaces[key(x, y)]) {
       console.log("Space is occupied!");
       return;
@@ -141,6 +146,8 @@ const board = (() => {
       return true;
     }
   }
+
+  let activePlayer = "x";
 
   return {
     clearBoard,
