@@ -98,18 +98,18 @@ const board = (() => {
 })();
 
 const controller = (() => {
-  // const move = function(x, y, value) {
-  //   // Can accept a specific player, or supplies its own
-  //   if (!value) {
-  //     value = activePlayer;
-  //   }
+  const move = function(x, y, value) {
+    // Can accept a specific player, or supplies its own
+    if (!value) {
+      value = activePlayer;
+    }
 
-  //   if (spaces[key(x, y)]) {
-  //     console.log("Space is occupied!");
-  //     return;
-  //   }
-  //   board.move(x, y, value);
-  // }
+    if (board.spaces[key(x, y)]) {
+      console.log("Space is occupied!");
+      return;
+    }
+    board.move(x, y, value);
+  }
 
   let turn = 0; // Fine as long as I don't want to print turns to the UI
 
