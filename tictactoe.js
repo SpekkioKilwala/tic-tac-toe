@@ -38,6 +38,7 @@ const Surface = ((board, el) => {
     }
     console.log(`Clicked on: ${keys}`)
     board.move(x, y);
+    drawBoard();
   })
 
   /**
