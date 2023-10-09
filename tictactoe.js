@@ -97,25 +97,8 @@ const board = (() => {
 })();
 
 const controller = (() => {
-  const move = function(x, y, value) {
-    // Can accept a specific player, or supplies its own
-    if (!value) {
-      value = activePlayer();
-    }
-
-    if (board.spaces[key(x, y)]) {
-      console.log("Space is occupied!");
-      return;
-    }
-    if (board.move(x, y, value)) {
-      turn++;
-    }
-  }
-
   let turn = 0; // Fine as long as I don't want to print turns to the UI
-
-  // Because we use modulo arithmetic to find the active player from the turn number,
-  // the indexes need to be 0 upwards and regular, so an array is used
+  let gameOver = false;
   const players = [
     {
       "side": "x",
@@ -129,6 +112,32 @@ const controller = (() => {
   const activePlayer = function() {
     return (players[turn % players.length].side);
   };
+
+  const move = function(x, y, value) {
+    // Can accept a specific player, or supplies its own
+    if (gameOver) {
+      return;
+    }
+    if (!value) {
+      value = activePlayer();
+    }
+
+    if (board.spaces[key(x, y)]) {
+      console.log("Space is occupied!");
+      return;
+    }
+    if (board.move(x, y, value)) { // board reports if the move was successfully applied
+      if (!winCondition()) {
+        turn++;
+      }
+    }
+  }
+
+  const winCondition = function() {
+    // A win search can be done much more efficiently if you
+    // specify the move that was JUST made.
+    return false;
+  }
 
   return {
     move,
