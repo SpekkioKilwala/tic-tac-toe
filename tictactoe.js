@@ -42,6 +42,10 @@ const between = function(x, min, max) {
   return false
 }
 
+const key = function(x, y){
+  return `${x},${y}`;
+}
+
 const board = (() => {
   // holds fundamental information on shape and board state
   // It doesn't know the rules of the game, it just takes locations and values and sets that.
@@ -50,10 +54,6 @@ const board = (() => {
   
   const spaces = {};
   // spaces["1,1"] = "x";
-
-  const key = function(x, y){
-    return `${x},${y}`;
-  }
 
   const clearBoard = function() {
     console.log("Board-clear not implemented");
@@ -90,7 +90,6 @@ const board = (() => {
     clearBoard,
     newBoard,
     move,
-    key,
     rows,
     columns,
     spaces,
@@ -137,7 +136,7 @@ const controller = (() => {
  * You set it up to use a particular element and particular board
  * @param {Element} el
  */
-const surface = ((controller, board, el) => {
+const surface = ((el) => {
   /**
    * Consider splitting this into multiple draws if I don't want to
    * completely redraw every time?
@@ -200,7 +199,7 @@ const surface = ((controller, board, el) => {
   return {
     drawBoard
   };
-})(controller, board, playArea);
+})(playArea);
 
 // setup
 board.newBoard();
