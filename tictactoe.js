@@ -100,7 +100,7 @@ const controller = (() => {
   const move = function(x, y, value) {
     // Can accept a specific player, or supplies its own
     if (!value) {
-      value = activePlayer;
+      value = activePlayer();
     }
 
     if (board.spaces[key(x, y)]) {
