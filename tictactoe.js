@@ -3,6 +3,30 @@
 const doc = document;
 const playArea = doc.querySelector(".board");
 
+// We will have an MVC-type model:
+// - view ("surface")
+// - controller
+// - model ("board")
+// And I need to know if these things need, or even can,
+// be declared in some particular order for dependency.
+// I think the real answer is that I can declare them in literally any order,
+// because they all exist in the global scope, so they can all be found by each other.
+
+// If I had to be strict about it, how could I do it?
+// Safe answer: Create objects without any dependencies, then link them to each
+// other with different methods.
+
+// Unsafe, case-by-case answer:
+// playArea -> Surface
+// Controller -> Surface (surface needs to know where it's sending instructions)
+// Model -> Controller (controller needs to know where it's sending instructions)
+// Model -> Surface (surface needs to know what it's drawing)
+//    playArea / Model -> Controller -> Surface
+
+// So if I wanted to ensure that the model itself wasn't presented to the user,
+// the controller could have a the model itself inside it, and only certain
+// methods ("safe" inputs and reading board state) would be available.
+
 /**
  * Tests whether something is between (INCLUSIVE) two limits.
  * Use Infinity/-Infinity for unbounded limits.
@@ -19,27 +43,20 @@ const between = function(x, min, max) {
 }
 
 const board = (() => {
-  // needs to tell you what is needed to draw it
+  // holds fundamental information on shape and board state
+  // It doesn't know the rules of the game, it just takes locations and values and sets that.
   const rows = 3;
   const columns = 3;
   
   const spaces = {};
   // spaces["1,1"] = "x";
 
-  // questionable value
-  const withinBorders = function(x, y){
-    if ((between(x, 1, columns)) & between(y, 1, rows)) {
-      return true;
-    }
-    return false;
-  }
-
   const key = function(x, y){
     return `${x},${y}`;
   }
 
   const clearBoard = function() {
-    console.log("Board-clear not implemented")
+    console.log("Board-clear not implemented");
   }
 
   // Thinking about infinite boards is bogging me down, so
@@ -59,16 +76,7 @@ const board = (() => {
   }
 
   const move = function(x, y, value) {
-    // Can accept a specific player, or supplies its own
-    if (!value) {
-      value = activePlayer;
-    }
-
-    if (spaces[key(x, y)]) {
-      console.log("Space is occupied!");
-      return;
-    }
-    else if (!((key(x, y)) in spaces)) {
+    if (!((key(x, y)) in spaces)) {
       console.log(`can't move at ${x}, ${y}`);
       return;
     }
@@ -77,6 +85,31 @@ const board = (() => {
       return true;
     }
   }
+
+  return {
+    clearBoard,
+    newBoard,
+    move,
+    key,
+    rows,
+    columns,
+    spaces,
+  };
+})();
+
+const controller = (() => {
+  // const move = function(x, y, value) {
+  //   // Can accept a specific player, or supplies its own
+  //   if (!value) {
+  //     value = activePlayer;
+  //   }
+
+  //   if (spaces[key(x, y)]) {
+  //     console.log("Space is occupied!");
+  //     return;
+  //   }
+  //   board.move(x, y, value);
+  // }
 
   let turn = 0; // Fine as long as I don't want to print turns to the UI
 
@@ -96,22 +129,8 @@ const board = (() => {
     return (players[turn % players.length]);
   };
 
-  return {
-    clearBoard,
-    newBoard,
-    move,
-    spaces,
-    players,
-    activePlayer};
-})();
-
-const controller = (() => {
-  const move = function(x, y, value) {
-    board.move(x, y, value);
-  }
-
   return {move};
-})(board);
+})();
 
 /**
  * The interface between the DOM and the console-level Board
