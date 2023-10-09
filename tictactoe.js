@@ -125,7 +125,7 @@ const controller = (() => {
     }
   ];
   const activePlayer = function() {
-    return (players[turn % players.length]);
+    return (players[turn % players.length].side);
   };
 
   return {
