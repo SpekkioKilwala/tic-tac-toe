@@ -124,11 +124,16 @@ const controller = (() => {
       "who": "human",
     }
   ];
-  const activePlayer = function(turn) {
+  const activePlayer = function() {
     return (players[turn % players.length]);
   };
 
-  return {move};
+  return {
+    move,
+    players,
+    turn,
+    activePlayer,
+  };
 })();
 
 /**
