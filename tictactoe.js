@@ -91,16 +91,24 @@ const board = (() => {
     clearBoard,
     newBoard,
     move,
-    rows,
-    columns,
-    spaces,
+    rows, // only ok because const
+    columns, // only ok because const
+    spaces, // A reference type, so it's OK
   };
 })();
 
 const controller = (() => {
-  let turn = 0; // Fine as long as I don't want to print turns to the UI
+  let _turn = 0; // Fine as long as I don't want to print turns to the UI
+  const turn = function() {
+    return _turn;
+  }
+
   let gameOver = false;
-  let status = "Controller online..."
+  let _status = "Controller online..."
+  const status = function() {
+    return _status;
+  }
+
   const players = [
     {
       "side": "x",
@@ -112,7 +120,7 @@ const controller = (() => {
     }
   ];
   const activePlayer = function() {
-    return (players[turn % players.length]);
+    return (players[turn() % players.length]);
   };
 
   const handle = function (action) {
@@ -138,12 +146,12 @@ const controller = (() => {
       // This structure is a little funky. If you have a round-based
       // gameplay loop then that loop should be obvious.
       if (!gameOver) {
-        turn++;
+        _turn++;
         if (activePlayer().who == "human") {
-          status = "Your turn:";
+          _status = "Your turn:";
           return;
         }
-        status = "AI outsourced to Mechanical Turk:";
+        _status = "AI outsourced to Mechanical Turk:";
         return;
         // if it's a human move now, just end
         // if it's an AI move now, just call its makeMove() method and end?
@@ -171,8 +179,7 @@ const controller = (() => {
   return {
     move,
     handle,
-    players,
-    turn,
+    players, // reference type, OK
     status,
     activePlayer,
   };
@@ -243,7 +250,7 @@ const surface = ((el) => {
       cell.setAttribute("data-x", x);
       cell.setAttribute("data-y", y);
     }
-    gameStatus.textContent = controller.status;
+    gameStatus.textContent = controller.status();
   }
 
   return {
