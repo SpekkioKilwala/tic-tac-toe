@@ -107,11 +107,11 @@ const controller = (() => {
     },
     {
       "side": "o",
-      "who": "human",
+      "who": "computer",
     }
   ];
   const activePlayer = function() {
-    return (players[turn % players.length].side);
+    return (players[turn % players.length]);
   };
 
   const move = function(x, y, value) {
@@ -120,7 +120,7 @@ const controller = (() => {
       return;
     }
     if (!value) {
-      value = activePlayer();
+      value = activePlayer().side;
     }
 
     if (board.spaces[key(x, y)]) {
@@ -133,8 +133,16 @@ const controller = (() => {
       // gameplay loop then that loop should be obvious.
       if (!gameOver) {
         turn++;
+        if (activePlayer().who == "human") {
+          gameStatus.textContent = "Your turn:";
+          return;
+        }
+        gameStatus.textContent = "AI outsourced to Mechanical Turk:";
+        return;
         // if it's a human move now, just end
         // if it's an AI move now, just call its makeMove() method and end?
+        // In a larger and more complex system, you'd fire an event or send a packet prompting
+        // all relevant parties for moves and end the local process?
       }
     }
   }
