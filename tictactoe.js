@@ -137,6 +137,17 @@ const controller = (() => {
   const checkWinCondition = function() {
     // A win search can be done much more efficiently if you
     // specify the move that was JUST made.
+
+    // An efficient universal search:
+    // if your victory condition was 3-lines in any direction on
+    // an arbitrarily large grid, then when you PLACE a mark,
+    // first you find a description of all the paths that that new
+    // mark is a part of, creating a 2d array of limited size.
+    // so like the first row is the horizontal stripe, the second row is the left-slant...
+    // then you have a 1d search in each of those for a sufficiently long chain.
+
+    
+
     return false;
   }
 
