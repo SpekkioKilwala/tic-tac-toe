@@ -2,6 +2,7 @@
 
 const doc = document;
 const playArea = doc.querySelector(".board");
+const gameStatus = doc.querySelector(".status")
 
 // We will have an MVC-type model:
 // - view ("surface")
