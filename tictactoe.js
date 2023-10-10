@@ -87,6 +87,16 @@ const board = (() => {
     }
   }
 
+  const lineSearch = function(side) {
+    // stub
+    return false;
+  }
+
+  const remainingSpaces = function() {
+    // stub
+    return 9;
+  }
+
   return {
     clearBoard,
     newBoard,
@@ -94,6 +104,8 @@ const board = (() => {
     rows, // only ok because const
     columns, // only ok because const
     spaces, // A reference type, so it's OK
+    lineSearch,
+    remainingSpaces,
   };
 })();
 
