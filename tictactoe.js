@@ -156,7 +156,7 @@ const controller = (() => {
       gameResult = checkWinCondition();
       // This structure is a little funky. If you have a round-based
       // gameplay loop then that loop should be obvious.
-      if (!gameResult) {
+      if (!gameResult.winner) {
         _turn++;
         if (activePlayer().who == "human") {
           return;
@@ -182,7 +182,7 @@ const controller = (() => {
     // so like the first row is the horizontal stripe, the second row is the left-slant...
     // then you have a 1d search in each of those for a sufficiently long chain.
 
-    return false;
+    return {};
   }
 
   return {
