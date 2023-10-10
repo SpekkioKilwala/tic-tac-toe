@@ -103,10 +103,21 @@ const controller = (() => {
     return _turn;
   }
 
-  let gameOver = false;
-  let _status = "Controller online..."
+  let gameResult = {
+    // undefined when you can still play,
+    // NULL on a draw!
+    // winner: undefined,
+    // method: undefined
+  };
+
   const status = function() {
-    return _status;
+    if (gameResult.winner) {
+      return `The winner is: ${gameResult.winner.who}`;
+    }
+    if (Object.is(gameResult.winner, null)) {
+      return "The game is a draw!";
+    }
+    return `Current turn: ${activePlayer().side}`;
   }
 
   const players = [
@@ -130,7 +141,7 @@ const controller = (() => {
 
   const move = function(x, y, value) {
     // Can accept a specific player, or supplies its own
-    if (gameOver) {
+    if (gameResult) {
       return;
     }
     if (!value) {
@@ -142,10 +153,10 @@ const controller = (() => {
       return;
     }
     if (board.move(x, y, value)) { // board reports if the move was successfully applied
-      gameOver = checkWinCondition();
+      gameResult = checkWinCondition();
       // This structure is a little funky. If you have a round-based
       // gameplay loop then that loop should be obvious.
-      if (!gameOver) {
+      if (!gameResult) {
         _turn++;
         if (activePlayer().who == "human") {
           _status = "Your turn:";
@@ -181,6 +192,7 @@ const controller = (() => {
     handle,
     players, // reference type, OK
     status,
+    gameResult,
     activePlayer,
   };
 })();
