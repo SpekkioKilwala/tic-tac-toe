@@ -223,20 +223,6 @@ const surface = ((el) => {
       return [null, null, null];
     }
     return [x, y, `${x},${y}`]
-
-    // This previous version contained a bug; rather than a logical "and"
-    // it performed a BITWISE "and" on the numeric values of the keys.
-    // The result was that where there was no overlap between numbers ("1" & "2")
-    // it claimed that the cell had no key.
-
-    // console.table(x, y);
-    // if (x & y) {
-    //   return `${x},${y}`
-    // }
-    // else {
-    //   console.log("No key");
-    //   return null;
-    // }
   }
 
   const drawBoard = function() {
