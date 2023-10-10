@@ -93,8 +93,8 @@ const board = (() => {
   }
 
   const remainingSpaces = function() {
-    // stub
-    return 9;
+    const _ = Object.values(spaces)
+    return (_.filter(x => x === null).length)
   }
 
   return {
@@ -211,7 +211,7 @@ const controller = (() => {
     if (board.move(x, y, value)) { // board reports if the move was successfully applied
       gameResult.check()
       // This structure is a little funky. If you have a round-based
-      // gameplay loop then that loop should be obvious.
+      // gameplay loop then that loop should be obvious... right?
       if (!gameResult.winner) {
         _turn++;
         if (activePlayer().who == "human") {
