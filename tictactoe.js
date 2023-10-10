@@ -141,7 +141,7 @@ const controller = (() => {
 
   const move = function(x, y, value) {
     // Can accept a specific player, or supplies its own
-    if (gameResult) {
+    if (gameResult.winner) {
       return;
     }
     if (!value) {
@@ -159,10 +159,8 @@ const controller = (() => {
       if (!gameResult) {
         _turn++;
         if (activePlayer().who == "human") {
-          _status = "Your turn:";
           return;
         }
-        _status = "AI outsourced to Mechanical Turk:";
         return;
         // if it's a human move now, just end
         // if it's an AI move now, just call its makeMove() method and end?
