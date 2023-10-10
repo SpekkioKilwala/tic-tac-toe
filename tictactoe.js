@@ -47,6 +47,16 @@ const key = function(x, y){
   return `${x},${y}`;
 }
 
+/**
+ * Given two arrays of equal length, adds them.
+ * @param {Array} point 
+ * @param {Array} vector 
+ * @return {Array}
+ */
+const vectorAdd = function(point, vector) {
+    
+}
+
 const board = (() => {
   // holds fundamental information on shape and board state
   // It doesn't know the rules of the game, it just takes locations and values and sets that.
@@ -87,14 +97,26 @@ const board = (() => {
     }
   }
 
+
+  /**
+   * Searches the board to see if a 3-long line (horz, vert, diagonal) of the
+   * given type can be found. If so, says where. Else, false.
+   * @param {String} side 
+   * @returns {*}
+   */
   const lineSearch = function(side) {
-    // stub
+    // 
+
     return false;
   }
 
+  /**
+   * counts how many empty spaces are left on the board
+   * @returns {Number}
+   */
   const remainingSpaces = function() {
-    const _ = Object.values(spaces)
-    return (_.filter(x => x === null).length)
+    const _ = Object.values(spaces) // array with just the values, not keys
+    return (_.filter(x => x === null).length) // counting those that are null
   }
 
   return {
@@ -152,7 +174,7 @@ const controller = (() => {
 
   /**
    * Human-readable explanation of game status, derived from gameResult and whose turn it is
-   * @returns {string}
+   * @returns {String}
    */
   const status = function() {
     if (gameResult.winner) {
@@ -192,9 +214,9 @@ const controller = (() => {
   /**
    * Resolve an attempt to move, passing it on to the board object if valid.
    * Does not allow taking actions if game state would preclude that.
-   * @param {string} x 
-   * @param {string} y 
-   * @param {string} value 
+   * @param {String} x 
+   * @param {String} y 
+   * @param {String} value 
    * @returns null
    */
   const move = function(x, y, value = activePlayer().side) {
