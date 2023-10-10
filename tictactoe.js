@@ -108,6 +108,34 @@ const controller = (() => {
     // NULL on a draw!
     // winner: undefined,
     // method: undefined
+    check: function() {
+      // A win search can be done much more efficiently if you
+      // specify the move that was JUST made.
+  
+      // An efficient universal search:
+      // if your victory condition was 3-lines in any direction on
+      // an arbitrarily large grid, then when you PLACE a mark,
+      // first you find a description of all the paths that that new
+      // mark is a part of, creating a 2d array of limited size.
+      // so like the first row is the horizontal stripe, the second row is the left-slant...
+      // then you have a 1d search in each of those for a sufficiently long chain.
+  
+      // because you can't win offturn, in this case we just check to see if the current player
+      // has just won. If not, see if there are any empty spaces left on the board.
+      // If there aren't any spaces left, the game is over.
+
+      let line = board.lineSearch(activePlayer().side)
+      if (line) {
+        console.log("active player just won")
+        this.winner = activePlayer.who;
+        this.method = line;
+      }
+      else if (board.remainingSpaces() == 0) {
+        console.log("no spaces left, game is over")
+        this.winner = null
+        this.method = "draw"
+      }
+    },
   };
 
   /**
@@ -158,6 +186,9 @@ const controller = (() => {
    * @returns null
    */
   const move = function(x, y, value = activePlayer().side) {
+    // There's only two broad cases:
+    // the first one is everything that would prevent a move actually being made,
+    // and the second one is that a move GETS made and therefore the full checks for wincon need to happen.
     if (gameResult.winner) {
       return;
     }
@@ -166,7 +197,7 @@ const controller = (() => {
       return;
     }
     if (board.move(x, y, value)) { // board reports if the move was successfully applied
-      gameResult = checkWinCondition();
+      gameResult.check()
       // This structure is a little funky. If you have a round-based
       // gameplay loop then that loop should be obvious.
       if (!gameResult.winner) {
@@ -174,6 +205,7 @@ const controller = (() => {
         if (activePlayer().who == "human") {
           return;
         }
+        console.log("Pretend the AI is prompted to move here.")
         return;
         // if it's a human move now, just end
         // if it's an AI move now, just call its makeMove() method and end?
@@ -181,21 +213,12 @@ const controller = (() => {
         // all relevant parties for moves and end the local process?
       }
     }
-  }
 
-  const checkWinCondition = function() {
-    // A win search can be done much more efficiently if you
-    // specify the move that was JUST made.
+    // if you have a situation where you want to do shallow checks on
+    // gamestate (e.g. computationally cheap stuff that happens on every
+    // interaction) then you want to overhaul this process to be one-dimensional,
+    // and put those updates at the end.
 
-    // An efficient universal search:
-    // if your victory condition was 3-lines in any direction on
-    // an arbitrarily large grid, then when you PLACE a mark,
-    // first you find a description of all the paths that that new
-    // mark is a part of, creating a 2d array of limited size.
-    // so like the first row is the horizontal stripe, the second row is the left-slant...
-    // then you have a 1d search in each of those for a sufficiently long chain.
-
-    return {};
   }
 
   return {
