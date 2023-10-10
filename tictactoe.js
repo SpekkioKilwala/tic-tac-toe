@@ -110,6 +110,10 @@ const controller = (() => {
     // method: undefined
   };
 
+  /**
+   * Human-readable explanation of game status, derived from gameResult and whose turn it is
+   * @returns {string}
+   */
   const status = function() {
     if (gameResult.winner) {
       return `The winner is: ${gameResult.winner.who}`;
@@ -134,20 +138,29 @@ const controller = (() => {
     return (players[turn() % players.length]);
   };
 
+  /**
+   * Calls whatever function it's given (usually controller.move())
+   * followed by a UI update. It is recommended to use this, not move()
+   * directly.
+   * @param {Function} action 
+   */
   const handle = function (action) {
     action();
     surface.drawBoard();
   }
 
-  const move = function(x, y, value) {
-    // Can accept a specific player, or supplies its own
+  /**
+   * Resolve an attempt to move, passing it on to the board object if valid.
+   * Does not allow taking actions if game state would preclude that.
+   * @param {string} x 
+   * @param {string} y 
+   * @param {string} value 
+   * @returns null
+   */
+  const move = function(x, y, value = activePlayer().side) {
     if (gameResult.winner) {
       return;
     }
-    if (!value) {
-      value = activePlayer().side;
-    }
-
     if (board.spaces[key(x, y)]) {
       console.log("Space is occupied!");
       return;
