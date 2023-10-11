@@ -30,7 +30,7 @@ const gameStatus = doc.querySelector(".status")
 
 /**
  * Tests whether something is between (INCLUSIVE) two limits.
- * Use Infinity/-Infinity for unbounded limits.
+ * Use Infinity/-Infinity for unbounded limits!
  * @param {Number} x 
  * @param {Number} min 
  * @param {Number} max 
@@ -48,13 +48,15 @@ const key = function(x, y){
 }
 
 /**
- * Given two arrays of equal length, adds them.
+ * Given two arrays, adds them. The answer is the same length as the first argument.
  * @param {Array} point 
  * @param {Array} vector 
  * @return {Array}
+ * by River + Varn K on stackoverflow
+ * https://stackoverflow.com/questions/7135874/element-wise-operations-in-javascript
  */
-const vectorAdd = function(point, vector) {
-    
+const vecAdd = function(a, b) {
+  return a.map((e,i) => e + b[i]);
 }
 
 const board = (() => {
@@ -63,6 +65,14 @@ const board = (() => {
   const rows = 3;
   const columns = 3;
   
+  // Objects have got too much flexibility in the wrong places and are too restrictive with keys.
+  // Possibly, a map would fix this.
+  // First obstacle: if I want to use arrays as keys e.g.
+  //   [1, 2]: "foo"
+  // then I can't just poll that naively: if I try to aMap.get([1, 2]) it
+  // returns UNDEFINED, because I just created a *new* array, which doesn't
+  // equate to the existing key.
+  // Trying tuple-like structure: x.set((3, 4), "foo") puts it at index 4.
   const spaces = {};
   // spaces["1,1"] = "x";
 
