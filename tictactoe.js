@@ -91,16 +91,14 @@ const board = (() => {
   // spaces["1,1"] = "x";
 
   const clearBoard = function() {
-    console.log("Board-clear not implemented");
+    for (let member in spaces) {delete spaces[member]}
   }
 
   // Thinking about infinite boards is bogging me down, so
   // I'll start with creating a 3x3 flat board
   const newBoard = function() {
     clearBoard()
-    // The inner loop gets incremented first, so those keys
-    // get created first, which means the inner loop has
-    // to be your ROWS.
+    // Inner loop is incremented first => is created first => must be the rows
     for (let y = 1; y <= rows; y++) {
         for (let x = 1; x <= columns; x++) {
         // A primitive way to see how the cells are laid out
@@ -160,18 +158,6 @@ const board = (() => {
       }    
       return true;
     }
-
-    // for rows 1-3
-    //    if x1, x2, x3 are all that side
-    //      return true
-    // for columns 1-3
-    //    if y1, y2, y3 are all that side
-    //      return true
-    // if 11, 22, 33 are all that side
-    //    return true
-    // if 13, 22, 31 are all that side
-    //    return true
-
     return false;
   }
 
