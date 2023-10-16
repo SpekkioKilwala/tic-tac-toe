@@ -234,28 +234,53 @@ const controller = (() => {
   };
 
   /**
-   * Calls whatever function it's given (usually controller.move())
-   * followed by a UI update. It is recommended to use this, not move()
-   * directly.
-   * @param {Function} action 
+   * The HUMAN PLAYER can call this with their attempted action (a move).
+   * If this causes the turn to change to an AI player, then further
+   * moves will be obtained and carried out until the game ends or it
+   * is a human's turn again.
    */
-  const handle = function (action) {
-    action();
+  const handle = function(action) {
+    let lock = true;
+    let nextAction = action
+    while (lock) {
+      const success = action();
+      if (!success) {
+        console.log("Action error")
+        break; // ensure that we don't get trapped in a loop
+      }
+      if (!gameResult.winner) {
+        if (activePlayer().who == "human") {
+          break;
+        }
+        // Get the correct move and simply continue looping
+        // nextAction = getMove(AI(activePlayer().who))
+        console.log("Pretend the AI is prompted to move here.")
+        break;
+      }
+    }
     surface.drawBoard();
   }
+
+  // /**
+  //  * Calls whatever function it's given (usually controller.move())
+  //  * followed by a UI update.
+  //  * @param {Function} action 
+  //  */
+  // const handleSingle = function (action) {
+  //   action();
+  //   surface.drawBoard();
+  // }
 
   /**
    * Resolve an attempt to move, passing it on to the board object if valid.
    * Does not allow taking actions if game state would preclude that.
+   * Does not recheck gameResult unless a move is successfully made.
    * @param {String} x 
    * @param {String} y 
    * @param {String} value 
    * @returns null
    */
   const move = function(x, y, value = activePlayer().side) {
-    // There's only two broad cases:
-    // the first one is everything that would prevent a move actually being made,
-    // and the second one is that a move GETS made and therefore the full checks for wincon need to happen.
     if (gameResult.winner) {
       return;
     }
@@ -265,26 +290,11 @@ const controller = (() => {
     }
     if (board.move(x, y, value)) { // board reports if the move was successfully applied
       gameResult.check()
-      // This structure is a little funky. If you have a round-based
-      // gameplay loop then that loop should be obvious... right?
-
-
-      ////////////////////
-      // THIS is the block that should be moved out of here.
-      // Handing control to the correct next player (if any) is
-      // a different concern to responding to the CURRENT move.
       if (!gameResult.winner) {
         _turn++;
-
-        if (activePlayer().who == "human") {
-          return;
-        }
-        console.log("Pretend the AI is prompted to move here.")
-        return;
-      /////////////////////
       }
+      return true; // designate that a move was successfully made
     }
-
   }
 
   return {
