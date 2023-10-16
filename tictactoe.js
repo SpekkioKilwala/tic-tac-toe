@@ -47,16 +47,36 @@ const key = function(x, y){
   return `${x},${y}`;
 }
 
+const unKey = function(key) {
+  return key.split(",")
+}
+
 /**
- * Given two arrays, adds them. The answer is the same length as the first argument.
+ * Given two arrays, adds them by element. The answer is the same length as the first argument.
  * @param {Array} a
  * @param {Array} b
  * @return {Array}
  * by River + Varn K on stackoverflow
  * https://stackoverflow.com/questions/7135874/element-wise-operations-in-javascript
+ * I have added a "+" which forces the elements to be treated as numeric, otherwise
+ * I get issues on my string-formatted values.
  */
 const vecAdd = function(a, b) {
-  return a.map((e,i) => e + b[i]);
+  return a.map((e,i) => + e + b[i]);
+}
+
+
+/**
+ * Given a key-formatted vector and an array-vector, add them,
+ * and return the new key. So that I can work directly on the keys as-is
+ * with vector math.
+ * @param {String} _key 
+ * @param {Array} vector 
+ */
+const keyAdd = function(_key, vector) {
+  const _ = unKey(_key);
+  return vecAdd(_, vector);
+  // return key(vecAdd(_, vector));
 }
 
 const board = (() => {
