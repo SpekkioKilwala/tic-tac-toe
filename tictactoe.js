@@ -124,7 +124,8 @@ const board = (() => {
 
   /**
    * Searches the board to see if a 3-long line (horz, vert, diagonal) of the
-   * given type can be found. If so, says where. Else, false.
+   * given type can be found. If so, true, else, false.
+   * Needs a rewrite for reporting on WHERE the line's found.
    * @param {String} side 
    * @returns {*}
    */
@@ -134,7 +135,7 @@ const board = (() => {
         if (board.spaces[key(x, y)] != side) {
           continue column;
         }
-      }
+      } // if you make it through three inner loops without hitting the continue, that's a full line
       return true;
     }
     row: for (let y = 1; y <= columns; y++) {
@@ -145,6 +146,21 @@ const board = (() => {
       }
       return true;
     }
+    let diagonals = 
+      [
+        [[1,1], [2,2], [3,3]],
+        [[1,3], [2,2], [3,1]]
+      ];
+    diag: for (let diagonal of diagonals) {
+      for (let [x, y] of diagonal) {
+        console.log("ping")
+        if (board.spaces[key(x, y)] != side) {
+          continue diag;
+        }
+      }    
+      return true;
+    }
+
     // for rows 1-3
     //    if x1, x2, x3 are all that side
     //      return true
