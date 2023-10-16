@@ -129,6 +129,16 @@ const board = (() => {
    * @returns {*}
    */
   const lineSearch = function(side) {
+    column: for (let x = 1; x <= rows; x++) {
+      console.log("dot")
+      for (let y = 1; y <= rows; y++) {
+        if (board.spaces[key(x, y)] != side) {
+          console.log("Checking: " + key(x, y))
+          continue column;
+        }
+        return true;
+      }
+    }
     // for rows 1-3
     //    if x1, x2, x3 are all that side
     //      return true
@@ -139,6 +149,7 @@ const board = (() => {
     //    return true
     // if 13, 22, 31 are all that side
     //    return true
+
     return false;
   }
 
@@ -238,6 +249,7 @@ const controller = (() => {
    * If this causes the turn to change to an AI player, then further
    * moves will be obtained and carried out until the game ends or it
    * is a human's turn again.
+   * I want to rewrite this more.
    */
   const handle = function(action) {
     let lock = true;
@@ -254,6 +266,7 @@ const controller = (() => {
         }
         // Get the correct move and simply continue looping
         // nextAction = getMove(AI(activePlayer().who))
+
         console.log("Pretend the AI is prompted to move here.")
         break;
       }
