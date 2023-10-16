@@ -131,13 +131,14 @@ const board = (() => {
   const lineSearch = function(side) {
     column: for (let x = 1; x <= rows; x++) {
       console.log("dot")
-      for (let y = 1; y <= rows; y++) {
+      for (let y = 1; y <= columns; y++) {
+        console.log("Checking: " + key(x, y))
         if (board.spaces[key(x, y)] != side) {
-          console.log("Checking: " + key(x, y))
+          console.log("Continuing!")
           continue column;
         }
-        return true;
       }
+      return true;
     }
     // for rows 1-3
     //    if x1, x2, x3 are all that side
