@@ -130,12 +130,17 @@ const board = (() => {
    */
   const lineSearch = function(side) {
     column: for (let x = 1; x <= rows; x++) {
-      console.log("dot")
       for (let y = 1; y <= columns; y++) {
-        console.log("Checking: " + key(x, y))
         if (board.spaces[key(x, y)] != side) {
-          console.log("Continuing!")
           continue column;
+        }
+      }
+      return true;
+    }
+    row: for (let y = 1; y <= columns; y++) {
+      for (let x = 1; x <= columns; x++) {
+        if (board.spaces[key(x, y)] != side) {
+          continue row;
         }
       }
       return true;
