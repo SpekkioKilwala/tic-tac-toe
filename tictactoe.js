@@ -228,6 +228,7 @@ const controller = (() => {
       "who": "computer",
     }
   ];
+
   const activePlayer = function() {
     return (players[turn() % players.length]);
   };
@@ -266,24 +267,23 @@ const controller = (() => {
       gameResult.check()
       // This structure is a little funky. If you have a round-based
       // gameplay loop then that loop should be obvious... right?
+
+
+      ////////////////////
+      // THIS is the block that should be moved out of here.
+      // Handing control to the correct next player (if any) is
+      // a different concern to responding to the CURRENT move.
       if (!gameResult.winner) {
         _turn++;
+
         if (activePlayer().who == "human") {
           return;
         }
         console.log("Pretend the AI is prompted to move here.")
         return;
-        // if it's a human move now, just end
-        // if it's an AI move now, just call its makeMove() method and end?
-        // In a larger and more complex system, you'd fire an event or send a packet prompting
-        // all relevant parties for moves and end the local process?
+      /////////////////////
       }
     }
-
-    // if you have a situation where you want to do shallow checks on
-    // gamestate (e.g. computationally cheap stuff that happens on every
-    // interaction) then you want to overhaul this process to be one-dimensional,
-    // and put those updates at the end.
 
   }
 
