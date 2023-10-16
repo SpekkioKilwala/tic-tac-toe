@@ -75,8 +75,8 @@ const vecAdd = function(a, b) {
  */
 const keyAdd = function(_key, vector) {
   const _ = unKey(_key);
-  return vecAdd(_, vector);
-  // return key(vecAdd(_, vector));
+  const [x, y] = vecAdd(_, vector)
+  return key(x, y)
 }
 
 const board = (() => {
