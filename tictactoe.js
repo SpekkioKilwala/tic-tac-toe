@@ -129,8 +129,16 @@ const board = (() => {
    * @returns {*}
    */
   const lineSearch = function(side) {
-    // 
-
+    // for rows 1-3
+    //    if x1, x2, x3 are all that side
+    //      return true
+    // for columns 1-3
+    //    if y1, y2, y3 are all that side
+    //      return true
+    // if 11, 22, 33 are all that side
+    //    return true
+    // if 13, 22, 31 are all that side
+    //    return true
     return false;
   }
 
