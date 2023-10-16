@@ -43,14 +43,6 @@ const between = function(x, min, max) {
   return false
 }
 
-const key = function(x, y){
-  return `${x},${y}`;
-}
-
-const unKey = function(key) {
-  return key.split(",")
-}
-
 /**
  * Given two arrays, adds them by element. The answer is the same length as the first argument.
  * @param {Array} a
@@ -85,10 +77,29 @@ const board = (() => {
   const rows = 3;
   const columns = 3;
   
-  // I would prefer to express this as a map, but using arrays as keys (e.g. [2,1])
-  // doesn't work as one would expect.
   const spaces = {};
   // spaces["1,1"] = "x";
+
+  const key = function(x, y){
+    return `${x},${y}`;
+  }
+  
+  const unKey = function(key) {
+    return key.split(",")
+  }
+
+  /**
+   * 
+   * @param {*} x 
+   * @param {*} y 
+   */
+  const getSpace = function(x, y) {
+    return spaces[key(x, y)]
+  }
+
+  const setSpace = function(x, y, value) {
+    spaces[key(x, y)] = value
+  }
 
   const clearBoard = function() {
     for (let member in spaces) {delete spaces[member]}
@@ -101,9 +112,7 @@ const board = (() => {
     // Inner loop is incremented first => is created first => must be the rows
     for (let y = 1; y <= rows; y++) {
         for (let x = 1; x <= columns; x++) {
-        // A primitive way to see how the cells are laid out
-        // spaces[key(x, y)] = key(x, y);
-        spaces[key(x, y)] = null;
+          setSpace(x, y, null);
       }
     }
   }
@@ -174,6 +183,8 @@ const board = (() => {
     clearBoard,
     newBoard,
     move,
+    getSpace,
+    setSpace,
     rows, // only ok because const
     columns, // only ok because const
     spaces, // A reference type, so it's OK
@@ -305,7 +316,7 @@ const controller = (() => {
     if (gameResult.winner) {
       return;
     }
-    if (board.spaces[key(x, y)]) {
+    if (board.getSpace(x, y)) {
       console.log("Space is occupied!");
       return;
     }
